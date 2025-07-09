@@ -2,8 +2,8 @@ import java.util.*;
 
 class Chat {
     List<String> members;
-    List<Integer> files; //files id
-    HashMap<Integer,String> messages;
+    List<Integer> files;
+    HashMap<Integer,String> messages; //<id,msg>
 
     public Chat() {
         this.members = new ArrayList<>();
@@ -27,7 +27,6 @@ class Chat {
 
     void add(int id, String newMessage){
         messages.put(id,newMessage);
-        files.add(id);
     }
 
     //3 overloaded remove() methods:
@@ -46,7 +45,7 @@ class Chat {
     void remove(int[] ids){
         for(int id: ids){
             if(files.contains(id)){
-                files.remove(id);
+                files.remove(Integer.valueOf(id));
             }
             else{
                 System.out.println("File with id "+id+" does not exist");
@@ -57,7 +56,6 @@ class Chat {
     void remove(int id){
         if(messages.containsKey(id)){
             messages.remove(id);
-            files.remove(id);
         }
         else{
             System.out.println("Message with id "+id+" does not exist");
@@ -82,32 +80,52 @@ class Chat {
 
 public class ChatSolution{
     public static void main(String[] args) {
+
         Scanner sc = new Scanner(System.in);
 
-        Chat chat = new Chat();
+        String[] lineArray = sc.nextLine().split(" "); //names
 
-        String[] names = {"John","Ray","Zee"};
-        chat.add(names);
+        Chat newChat = new Chat();
+        newChat.add(lineArray);
 
-        int[] ids = {567,986,789};
-        chat.add(ids);
+        lineArray = sc.nextLine().split(" "); //files
 
-        int n = sc.nextInt(); sc.nextLine();
-
-        for(int i=0;i<n;i++){
-            String msg = sc.nextLine();
-            chat.add(i,msg);
+        int[] files = new int[lineArray.length];
+        for (int i=0; i < lineArray.length; i++) {
+            files[i] = Integer.parseInt(lineArray[i]);
         }
 
-        String[] namesList = {"Ray"};
-        chat.remove(namesList);
+        newChat.add(files);
 
-        int[] idList = {7,4,3};
-//        chat.remove(idList);
-        chat.remove(7);
-        chat.remove(4);
-        chat.remove(3);
+        String line = sc.nextLine();
+        int numberOfMessages = Integer.parseInt(line); //convert
 
-        chat.printConversation();
+        for (int i=0; i < numberOfMessages; i++) {
+            line = sc.nextLine();
+            newChat.add(i, line);
+        }
+
+        lineArray = sc.nextLine().split(" "); //names array/list
+
+        newChat.remove(lineArray);
+
+        lineArray = sc.nextLine().split(" "); //files array/list
+
+        int[] filesRemoved = new int[lineArray.length];
+
+        for(int i=0; i < lineArray.length; i++) {
+            filesRemoved[i] = Integer.parseInt(lineArray[i]);
+        }
+
+        newChat.remove(filesRemoved);
+
+        lineArray = sc.nextLine().split(" "); //ids
+
+        for(int i=0; i < lineArray.length; i++) {
+            newChat.remove(Integer.parseInt(lineArray[i]));
+        }
+
+        newChat.printConversation();
+
     }
 }
